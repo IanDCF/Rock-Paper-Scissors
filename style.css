@@ -1,0 +1,29 @@
+#container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 100px 100px;
+    gap: 10px;
+    max-width: 800px;
+    margin: 30px auto;
+    overflow: auto;
+    min-height: 300px;
+    border: 1px solid steelblue;
+    padding: 30px;
+    border-radius: 5px; 
+  }
+#user1-box {
+  grid-column: 1;
+  grid-row: 1;
+}
+#vs {
+  grid-column: 2;
+  grid-row: 1;
+}
+#user2-box {
+  grid-column: 3;
+  grid-row: 1;
+}
+#result-box {
+  grid-column: 1/3;
+  grid-row: 2;
+}
