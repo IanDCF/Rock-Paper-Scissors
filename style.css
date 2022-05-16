@@ -11,19 +11,24 @@
     padding: 30px;
     border-radius: 5px; 
   }
+
+#header {
+  grid-column: 1/3;
+  grid-row: 1;
+}
 #user1-box {
   grid-column: 1;
-  grid-row: 1;
+  grid-row: 2;
 }
 #vs {
   grid-column: 2;
-  grid-row: 1;
+  grid-row: 2;
 }
 #user2-box {
   grid-column: 3;
-  grid-row: 1;
+  grid-row: 2;
 }
 #result-box {
   grid-column: 1/3;
-  grid-row: 2;
+  grid-row: 3;
 }
