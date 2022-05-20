@@ -12,10 +12,10 @@
             <h1>Rock Paper Scissors Game</h1>
         </header>
         <div id = "user1-box">
-            <h2 id = "user1-choice">User 1:</h2>
-            <button>Rock</button>
-            <button>Papper</button>
-            <button>Scissors</button>
+            <h2>User 1: <span id="user1"></span></h2>
+            <button id="rock" class="u1choice">Rock</button>
+            <button id="paper" class="u1choice">Paper</button>
+            <button id="scissors" class="u1choice">Scissors</button>
         </div>
 
         <div id = "vs">
@@ -23,14 +23,15 @@
         </div>
 
         <div id = "user2-box">
-            <h2 id = "user2-choice">User 2:</h2>
-            <button>Rock</button>
-            <button>Papper</button>
-            <button>Scissors</button>
+            <h2>User 2: <span id="user2"></span></h2>
+            <button id="rock" class="u2choice">Rock</button>
+            <button id="paper" class="u2choice">Paper</button>
+            <button id="scissors" class="u2choice">Scissors</button>
         </div>
 
         <div id = "result-box">
-            <h2 id = "result">Result:</h2>
+            <label for="shoot">Rock, paper, scissors...</label><br />
+            <button id="shoot">SHOOT!</button><span id="result"></span>
         </div>
         
     </div>
