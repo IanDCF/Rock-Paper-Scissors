@@ -8,8 +8,10 @@
 // element2Children.forEach(function); // calls function on each child of E2
 
 const mainContainer = document.getElementById("container")
-let player1 = ""
-let player2 = ""
+let p1Name = "Player 1"
+let p2Name = "Player 2"
+let choice1 = ""
+let choice2 = ""
 let result
 
 const renderResult = (ch1, ch2) => {
@@ -40,8 +42,10 @@ const renderResult = (ch1, ch2) => {
     const handleClick = () => {
         mainContainer.removeChild(resultContainer)
         mainContainer.removeChild(newGameButton)
-        player1 = ""
-        player2 = ""
+        choice1 = ""
+        choice2 = ""
+        p1Name = "Player 1"
+        p2Name = "Player 2"
         result = null
         renderStart()
     }
@@ -78,19 +82,47 @@ const renderChoices = () => {
     const choiceContainer = document.createElement("div")
     choiceContainer.classList.add("choice-container")
 
+    const nameContainer = document.createElement("div")
+    nameContainer.classList.add("name-container")
+
     const playerName = document.createElement("h3")
     playerName.classList.add("player-name")
-    playerName.innerText = player1.length ? "Player 2" : "Player 1"
-    choiceContainer.appendChild(playerName)
+    playerName.innerText = choice1.length ? p2Name : p1Name
+    nameContainer.appendChild(playerName)
+
+    const inputName = document.createElement("input")
+    inputName.setAttribute("type", "text")
+    inputName.setAttribute("id", "player-name")
+    nameContainer.appendChild(inputName)
+
+    const okButton = document.createElement("button")
+    okButton.classList.add("name-btn")
+    const inputText = document.createElement("h4")
+    inputText.innerText = "OK"
+    okButton.appendChild(inputText)
+    nameContainer.appendChild(okButton)
+
+    const setName = () => {
+        if (choice1.length) {
+            p2Name = document.getElementById("player-name").value 
+        } else {
+            p1Name = document.getElementById("player-name").value
+        }
+        playerName.innerText = document.getElementById("player-name").value
+        document.getElementById("player-name").value = null
+    }
+
+    okButton.onclick = setName
 
     const handleClick = (choice) => {
-        player1.length ? player2 = choice : player1 = choice
+        choice1.length ? choice2 = choice : choice1 = choice
         mainContainer.removeChild(choiceContainer)
-        if (!player2) {
+        mainContainer.removeChild(nameContainer)
+        if (!choice2) {
             return renderPrompt()
         } else {
-            console.log(player1, player2)
-            renderResult(player1, player2)
+            console.log(choice1, choice2)
+            renderResult(choice1, choice2)
         }
     }
     
@@ -108,6 +140,7 @@ const renderChoices = () => {
         choiceContainer.appendChild(button)
     })
 
+    mainContainer.appendChild(nameContainer)
     mainContainer.appendChild(choiceContainer)
 }
 
@@ -134,33 +167,33 @@ renderStart()
 
 
 
-function getResult(choice1, choice2) {
-    if (choice1 === choice2) {
+function getResult(p1, p2) {
+    if (p1 === p2) {
         result = 0
         return 'It\'s a DRAW!';
     }
-    if (choice1 == 'rock' && choice2 == 'paper') {
+    if (p1 == 'rock' && p2 == 'paper') {
         result = 2
-        return 'Player 2 is the WINNER'
+        return `${p2Name} is the WINNER`
     }
-    if (choice1 == 'rock' && choice2 == 'scissors') {
+    if (p1 == 'rock' && p2 == 'scissors') {
         result = 1
-        return 'Player 1 is the WINNER'
+        return `${p1Name} is the WINNER`
     }
-    if (choice1 == 'paper' && choice2 == 'rock') {
+    if (p1 == 'paper' && p2 == 'rock') {
         result = 1
-        return 'Player 1 is the WINNER'
+        return `${p1Name} is the WINNER`
     }
-    if (choice1 == 'paper' && choice2 == 'scissors') {
+    if (p1 == 'paper' && p2 == 'scissors') {
         result = 2
-        return 'Player 2 is the WINNER'
+        return `${p2Name} is the WINNER`
     }
-    if (choice1 == 'scissors' && choice2 == 'rock') {
+    if (p1 == 'scissors' && p2 == 'rock') {
         result = 2
-        return 'Player 2 is the WINNER'
+        return `${p2Name} is the WINNER`
     }
-    if (choice1 == 'scissors' && choice2 == 'paper') {
+    if (p1 == 'scissors' && p2 == 'paper') {
         result = 1
-        return 'Player 1 is the WINNER'
+        return `${p1Name} is the WINNER`
     }
 }

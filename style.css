@@ -1,5 +1,6 @@
 .rps-header {
   text-align: center;
+  font-family: 'georgia';
 }
 
 .rps-wrapper {
@@ -10,6 +11,7 @@
 }
 
 .rps-container {
+  font-family: 'courier new';
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,6 +20,15 @@
   width: 80%;
   height: 80vh;
   border-radius: 5px;
+}
+
+.name-container {
+
+  margin: 20px;
+}
+.choice-container {
+  display: flex;
+  margin: 10px;
 }
 
 .result-img {
