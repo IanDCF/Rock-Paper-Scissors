@@ -8,11 +8,18 @@
 // element2Children.forEach(function); // calls function on each child of E2
 
 const mainContainer = document.getElementById("container")
-let p1Name = "Player 1"
-let p2Name = "Player 2"
+let p1Name = "Player1"
+let p2Name = "Player2"
 let choice1 = ""
 let choice2 = ""
 let result
+var count1 = 0
+var count2 = 0
+let players = [
+    { name: p1Name, score: count1},
+    { name: p2Name, score: count2}
+]
+let headers = ['Name', 'Score']
 
 const renderResult = (ch1, ch2) => {
     
@@ -33,6 +40,31 @@ const renderResult = (ch1, ch2) => {
     img.style.borderRadius = "2px"
     resultContainer.appendChild(img)
 
+// Score Board _________________________________________________
+    const scoreBoard = document.createElement("table")
+    const headerRow = document.createElement("tr")
+
+    headers.forEach( header => {
+        const column = document.createElement("th")
+        const textNode = document.createTextNode(header)
+        column.appendChild(textNode)
+        headerRow.appendChild(column)
+    })
+    scoreBoard.appendChild(headerRow)
+
+    players.forEach( player => {
+        const row = document.createElement("tr")
+
+        Object.values(player).forEach( text => {
+            const cell = document.createElement("td")
+            const textNode = document.createTextNode(text)
+            cell.appendChild(textNode)
+            row.appendChild(cell)
+        })
+        scoreBoard.appendChild(row)
+    })
+
+
     const newGameButton = document.createElement("button")
     newGameButton.classList.add("new-game-btn")
     const btnText = document.createElement("h4")
@@ -42,19 +74,29 @@ const renderResult = (ch1, ch2) => {
     const handleClick = () => {
         mainContainer.removeChild(resultContainer)
         mainContainer.removeChild(newGameButton)
+        mainContainer.removeChild(resetButton)
+        mainContainer.removeChild(scoreBoard)
         choice1 = ""
         choice2 = ""
-        p1Name = "Player 1"
-        p2Name = "Player 2"
+        p1Name = "Player1"
+        p2Name = "Player2"
         result = null
         renderStart()
     }
 
     newGameButton.onclick = handleClick
 
-    mainContainer.appendChild(resultContainer)
-    mainContainer.appendChild(newGameButton)
+    const resetButton = document.createElement("button")
+    const scoreBtnText = document.createElement("h4")
+    scoreBtnText.innerText = "Reset"
+    resetButton.appendChild(scoreBtnText)
 
+    
+
+    mainContainer.appendChild(resultContainer)
+    mainContainer.appendChild(scoreBoard)
+    mainContainer.appendChild(newGameButton)
+    mainContainer.appendChild(resetButton)
 }
 
 const renderPrompt = () => {
@@ -174,26 +216,32 @@ function getResult(p1, p2) {
     }
     if (p1 == 'rock' && p2 == 'paper') {
         result = 2
+        count2++
         return `${p2Name} is the WINNER`
     }
     if (p1 == 'rock' && p2 == 'scissors') {
         result = 1
+        count1++
         return `${p1Name} is the WINNER`
     }
     if (p1 == 'paper' && p2 == 'rock') {
         result = 1
+        count1++
         return `${p1Name} is the WINNER`
     }
     if (p1 == 'paper' && p2 == 'scissors') {
         result = 2
+        count2++
         return `${p2Name} is the WINNER`
     }
     if (p1 == 'scissors' && p2 == 'rock') {
         result = 2
+        count2++
         return `${p2Name} is the WINNER`
     }
     if (p1 == 'scissors' && p2 == 'paper') {
         result = 1
+        count1++
         return `${p1Name} is the WINNER`
     }
 }
