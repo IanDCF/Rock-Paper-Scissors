@@ -8,27 +8,24 @@
 // element2Children.forEach(function); // calls function on each child of E2
 
 const mainContainer = document.getElementById("container")
-let p1Name = "Player1"
-let p2Name = "Player2"
-let choice1 = ""
-let choice2 = ""
 let result
-var count1 = 0
-var count2 = 0
 let players = [
-    { name: p1Name, score: count1},
-    { name: p2Name, score: count2}
+    { name: 'Player1', choice:'', score: 0},
+    { name: 'Player2', choice:'', score: 0}
 ]
 let headers = ['Name', 'Score']
 
+// Render Result Page __________________________________________
 const renderResult = (ch1, ch2) => {
     
     const resultContainer = document.createElement("div")
+    // Display Text
     const resultText = document.createElement("h3")
     resultText.innerText = getResult(ch1, ch2)
     console.log(result)
     resultContainer.appendChild(resultText)
 
+    // Image Element
     const img = document.createElement("img")
     img.classList.add("result-img")
     if (result === 0) {
@@ -40,7 +37,7 @@ const renderResult = (ch1, ch2) => {
     img.style.borderRadius = "2px"
     resultContainer.appendChild(img)
 
-// Score Board _________________________________________________
+    // Score Board 
     const scoreBoard = document.createElement("table")
     const headerRow = document.createElement("tr")
 
@@ -64,45 +61,63 @@ const renderResult = (ch1, ch2) => {
         scoreBoard.appendChild(row)
     })
 
+    // New Game Button
+    const btnContainer = document.createElement("div")
 
     const newGameButton = document.createElement("button")
     newGameButton.classList.add("new-game-btn")
     const btnText = document.createElement("h4")
     btnText.innerText = "New Game"
     newGameButton.appendChild(btnText)
+    btnContainer.appendChild(newGameButton)
     
-    const handleClick = () => {
+    const newGameClick = () => {
         mainContainer.removeChild(resultContainer)
-        mainContainer.removeChild(newGameButton)
-        mainContainer.removeChild(resetButton)
+        mainContainer.removeChild(btnContainer)
         mainContainer.removeChild(scoreBoard)
-        choice1 = ""
-        choice2 = ""
-        p1Name = "Player1"
-        p2Name = "Player2"
+        players[0].choice = ""
+        players[1].choice = ""
         result = null
         renderStart()
     }
 
-    newGameButton.onclick = handleClick
+    newGameButton.onclick = newGameClick
 
+    // Reset Button
     const resetButton = document.createElement("button")
     const scoreBtnText = document.createElement("h4")
     scoreBtnText.innerText = "Reset"
     resetButton.appendChild(scoreBtnText)
+    btnContainer.appendChild(resetButton)
+
+    const resetClick = () => {
+        mainContainer.removeChild(resultContainer)
+        mainContainer.removeChild(btnContainer)
+        mainContainer.removeChild(scoreBoard)
+        players[0].name = "Player1"
+        players[1].name = "Player2"
+        players[0].score = 0
+        players[1].score = 0
+        players[0].choice = ""
+        players[1].choice = ""
+        result = null
+        renderStart()
+    }
+
+    resetButton.onclick = resetClick
 
     
-
+    // Append all child elements to main Container
     mainContainer.appendChild(resultContainer)
     mainContainer.appendChild(scoreBoard)
-    mainContainer.appendChild(newGameButton)
-    mainContainer.appendChild(resetButton)
+    mainContainer.appendChild(btnContainer)
 }
 
+// Render Prompt after Player1's choice___________________________________
 const renderPrompt = () => {
     const prompt = document.createElement("h3")
     prompt.classList.add("prompt")
-    prompt.innerText = "Player 1 choice locked and loaded. Player 2, it's your turn."
+    prompt.innerText = `${players[0].name}'s choice locked and loaded. ${players[1].name}, it's your turn.`
 
     const promptButton = document.createElement("button")
     promptButton.classList.add("prompt-btn")
@@ -120,18 +135,19 @@ const renderPrompt = () => {
     mainContainer.appendChild(promptButton)
 }
 
+// Render Choices Page__________________________________________________
 const renderChoices = () => {
-    const choiceContainer = document.createElement("div")
-    choiceContainer.classList.add("choice-container")
 
+    // Display Player Name
     const nameContainer = document.createElement("div")
     nameContainer.classList.add("name-container")
 
     const playerName = document.createElement("h3")
     playerName.classList.add("player-name")
-    playerName.innerText = choice1.length ? p2Name : p1Name
+    playerName.innerText = players[0].choice.length ? players[1].name : players[0].name
     nameContainer.appendChild(playerName)
-
+    
+    // Custom Name Functionality
     const inputName = document.createElement("input")
     inputName.setAttribute("type", "text")
     inputName.setAttribute("id", "player-name")
@@ -145,10 +161,10 @@ const renderChoices = () => {
     nameContainer.appendChild(okButton)
 
     const setName = () => {
-        if (choice1.length) {
-            p2Name = document.getElementById("player-name").value 
+        if (players[0].choice.length) {
+            players[1].name = document.getElementById("player-name").value 
         } else {
-            p1Name = document.getElementById("player-name").value
+            players[0].name = document.getElementById("player-name").value
         }
         playerName.innerText = document.getElementById("player-name").value
         document.getElementById("player-name").value = null
@@ -156,15 +172,18 @@ const renderChoices = () => {
 
     okButton.onclick = setName
 
+    // Rock, Paper, Scissors Buttons
+    const choiceContainer = document.createElement("div")
+    choiceContainer.classList.add("choice-container")
+
     const handleClick = (choice) => {
-        choice1.length ? choice2 = choice : choice1 = choice
+        players[0].choice.length ? players[1].choice = choice : players[0].choice = choice
         mainContainer.removeChild(choiceContainer)
         mainContainer.removeChild(nameContainer)
-        if (!choice2) {
+        if (!players[1].choice) {
             return renderPrompt()
         } else {
-            console.log(choice1, choice2)
-            renderResult(choice1, choice2)
+            renderResult(players[0].choice, players[1].choice)
         }
     }
     
@@ -182,33 +201,38 @@ const renderChoices = () => {
         choiceContainer.appendChild(button)
     })
 
+
     mainContainer.appendChild(nameContainer)
     mainContainer.appendChild(choiceContainer)
 }
 
+// Render Start Page____________________________________________________
 const renderStart = () => {
-
+    // Start Game Button
     const startButton = document.createElement("button")
     startButton.classList.add("start-btn")
-
-    const handleClick = () => {
-      mainContainer.removeChild(startButton);
-      renderChoices()
-    }
-    startButton.onclick = handleClick
 
     const buttonText = document.createElement("h3")
     buttonText.innerText = "Start Game"
     startButton.appendChild(buttonText)
 
+    const handleClick = () => {
+      mainContainer.removeChild(startButton);
+      renderChoices()
+    }
+
+    startButton.onclick = handleClick
+
+
     mainContainer.appendChild(startButton)
 }
 
+// Call to render Start Page___________________________________________
 renderStart()
 
 
 
-
+// Logic ___________________________________________________________
 function getResult(p1, p2) {
     if (p1 === p2) {
         result = 0
@@ -216,32 +240,32 @@ function getResult(p1, p2) {
     }
     if (p1 == 'rock' && p2 == 'paper') {
         result = 2
-        count2++
-        return `${p2Name} is the WINNER`
+        players[1].score++
+        return `${players[1].name} is the WINNER`
     }
     if (p1 == 'rock' && p2 == 'scissors') {
         result = 1
-        count1++
-        return `${p1Name} is the WINNER`
+        players[0].score++
+        return `${players[0].name} is the WINNER`
     }
     if (p1 == 'paper' && p2 == 'rock') {
         result = 1
-        count1++
-        return `${p1Name} is the WINNER`
+        players[0].score++
+        return `${players[0].name} is the WINNER`
     }
     if (p1 == 'paper' && p2 == 'scissors') {
         result = 2
-        count2++
-        return `${p2Name} is the WINNER`
+        players[1].score++
+        return `${players[1].name} is the WINNER`
     }
     if (p1 == 'scissors' && p2 == 'rock') {
         result = 2
-        count2++
-        return `${p2Name} is the WINNER`
+        players[1].score++
+        return `${players[1].name} is the WINNER`
     }
     if (p1 == 'scissors' && p2 == 'paper') {
         result = 1
-        count1++
-        return `${p1Name} is the WINNER`
+        players[0].score++
+        return `${players[0].name} is the WINNER`
     }
 }
